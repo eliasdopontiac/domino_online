@@ -1,0 +1,713 @@
+:root {
+    --boteco-yellow: #fcd116;
+    --boteco-dark-yellow: #dca700;
+    --felt-green: #1f4f2e;
+    --wood-dark: #2a1610;
+    --wood-light: #523428;
+    --comanda-blue: #00008b;
+    --comanda-paper: #f4f1ea;
+    --text-light: #f0f0f0;
+    --tile-bone: #f8f6f0;
+    --tile-shadow: #8b867c;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--wood-dark);
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- LOBBY (Chalkboard style) --- */
+#lobby-screen {
+    background: radial-gradient(circle, #333 0%, #111 100%);
+    color: var(--text-light);
+}
+
+.lobby-container {
+    background: rgba(255, 255, 255, 0.05);
+    border: 8px solid var(--wood-light);
+    border-radius: 12px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.9);
+}
+
+.game-title {
+    font-family: 'Caveat', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: var(--boteco-yellow);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-family: 'Caveat', cursive;
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    border-radius: 6px;
+    font-size: 1.1rem;
+}
+
+.avatar-selection {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.avatar-selection label {
+    cursor: pointer;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 15px;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.avatar-selection input {
+    display: none;
+}
+
+.avatar-selection input:checked + span {
+    color: var(--boteco-yellow);
+    font-weight: bold;
+}
+
+.avatar-selection input:checked ~ label, .avatar-selection label:has(input:checked) {
+    background: rgba(252, 209, 22, 0.2);
+    border: 1px solid var(--boteco-yellow);
+}
+
+button {
+    background: var(--boteco-yellow);
+    color: #111;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--boteco-dark-yellow);
+    transition: 0.1s;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 var(--boteco-dark-yellow);
+}
+
+ul#room-list {
+    list-style: none;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+ul#room-list li {
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+}
+
+ul#room-list li button {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* --- WAITING SCREEN --- */
+#waiting-screen {
+    background: radial-gradient(circle, #333 0%, #111 100%);
+    color: white;
+}
+
+.waiting-container {
+    background: rgba(0,0,0,0.6);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+.players-list {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.player-slot {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-slot.empty {
+    opacity: 0.5;
+    border: 1px dashed rgba(255,255,255,0.3);
+}
+
+/* --- GAME SCREEN --- */
+#game-screen {
+    background: var(--wood-dark);
+}
+
+.table-texture {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    background: radial-gradient(circle, #206d39 0%, #114220 100%);
+    border: 14px solid var(--wood-light);
+    border-radius: 40px;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.5), 0 20px 50px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.table-decoration {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.table-decoration.copo {
+    top: 10%;
+    right: 10%;
+    transform: rotate(15deg);
+}
+
+.table-decoration.petisco {
+    bottom: 20%;
+    left: 5%;
+    transform: rotate(-10deg);
+}
+
+#opponents-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.opponent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    border-radius: 12px;
+    position: absolute;
+    color: #fffde6;
+    font-weight: bold;
+    pointer-events: auto;
+}
+
+.opponent.pos-left {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.opponent.pos-top {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.opponent.pos-right {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.opponent.active-turn {
+    background: rgba(255,255,255,0.25);
+    box-shadow: 0 0 15px rgba(252, 209, 22, 0.8);
+    border: 1px solid var(--boteco-yellow);
+}
+
+.avatar {
+    font-size: 2rem;
+}
+
+.avatar-bubble {
+    position: absolute;
+    top: -40px;
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: 0.3s;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.avatar-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.avatar-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
+
+#board-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    padding: 80px 140px;
+}
+
+#board-scroll {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+.board-cross {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.branch-left {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.branch-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.branch-top {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+.branch-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spinner-slot {
+    margin: 20px;
+}
+
+#my-player {
+    height: 180px;
+    background: rgba(0,0,0,0.3);
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 20px;
+    z-index: 2;
+}
+
+#my-avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    position: relative;
+}
+
+#my-hand {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+/* --- DOMINO TILES --- */
+.tile {
+    width: 40px;
+    height: 80px;
+    background: var(--tile-bone);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 4px 6px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    border: 1px solid #d4d0c5;
+}
+
+.tile::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #333;
+    transform: translateY(-50%);
+}
+
+.tile-half {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 5px;
+    gap: 1px;
+}
+
+/* Hide ALL dots by default using visibility so grid positions are preserved */
+.tile-half > .dot { visibility: hidden; }
+
+.dot {
+    background: #1a1a1a;
+    border-radius: 50%;
+    width: 7px;
+    height: 7px;
+    margin: auto;
+    box-shadow: inset 1px 1px 2px rgba(255,255,255,0.3);
+}
+
+/*
+  Grid positions (3×3) — left-to-right, top-to-bottom:
+  d1(top-left)    d2(top-center)    d3(top-right)
+  d4(mid-left)    d5(center)        d6(mid-right)
+  d7(bot-left)    d8(bot-center)    d9(bot-right)
+*/
+
+/* 0 pips — all hidden (default) */
+.dots-0 > .dot { visibility: hidden; }
+
+/* 1 pip — center */
+.dots-1 > .d5 { visibility: visible; }
+
+/* 2 pips — top-right, bottom-left */
+.dots-2 > .d3,
+.dots-2 > .d7 { visibility: visible; }
+
+/* 3 pips — top-right, center, bottom-left */
+.dots-3 > .d3,
+.dots-3 > .d5,
+.dots-3 > .d7 { visibility: visible; }
+
+/* 4 pips — four corners */
+.dots-4 > .d1,
+.dots-4 > .d3,
+.dots-4 > .d7,
+.dots-4 > .d9 { visibility: visible; }
+
+/* 5 pips — four corners + center */
+.dots-5 > .d1,
+.dots-5 > .d3,
+.dots-5 > .d5,
+.dots-5 > .d7,
+.dots-5 > .d9 { visibility: visible; }
+
+/* 6 pips — left column + right column */
+.dots-6 > .d1,
+.dots-6 > .d4,
+.dots-6 > .d7,
+.dots-6 > .d3,
+.dots-6 > .d6,
+.dots-6 > .d9 { visibility: visible; }
+
+
+.tile.playable {
+    cursor: pointer;
+    transform: translateY(-12px);
+    border: 2px solid var(--boteco-yellow);
+    animation: tilePulse 1.2s infinite alternate ease-in-out;
+    transition: transform 0.2s;
+}
+
+.tile.playable:hover {
+    transform: translateY(-18px);
+}
+
+@keyframes tilePulse {
+    0% {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.4), 0 0 4px rgba(252, 209, 22, 0.4);
+        border-color: rgba(252, 209, 22, 0.6);
+    }
+    100% {
+        box-shadow: 0 12px 22px rgba(0,0,0,0.6), 0 0 16px rgba(252, 209, 22, 1);
+        border-color: rgba(252, 209, 22, 1);
+    }
+}
+
+.board-tile {
+    margin: 0;
+}
+.board-tile.horizontal {
+    margin: 0 20px;
+}
+
+/* Comanda */
+#comanda {
+    position: absolute;
+    top: 5%;
+    right: 2%;
+    width: 250px;
+    height: 300px;
+    background: var(--comanda-paper);
+    color: var(--comanda-blue);
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    padding: 20px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    transform: rotate(3deg);
+    z-index: 10;
+    overflow-y: auto;
+    border-left: 2px solid #ccc;
+}
+
+.comanda-header {
+    font-size: 1.8rem;
+    border-bottom: 2px dashed var(--comanda-blue);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#comanda-log {
+    list-style: none;
+}
+#comanda-log li {
+    margin-bottom: 5px;
+    line-height: 1.1;
+}
+
+/* Chat Container */
+#chat-container {
+    position: absolute;
+    bottom: 5%;
+    right: 2%;
+    width: 300px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#chat-messages {
+    height: 100px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 5px;
+}
+.chat-input-area input {
+    margin: 0;
+    flex: 1;
+    padding: 8px;
+}
+.chat-input-area button {
+    width: auto;
+    margin: 0;
+    padding: 8px 12px;
+}
+
+.reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.reaction-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    box-shadow: none;
+    font-size: 0.8rem;
+    padding: 5px 8px;
+    width: auto;
+    margin: 0;
+    border-radius: 12px;
+}
+
+/* Modals */
+.modal {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--boteco-yellow);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    color: #111;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .table-texture {
+        width: 100%;
+        height: 100%;
+        top: 0; left: 0;
+        border-radius: 0;
+    }
+    
+    #comanda {
+        display: none; /* Hide comanda on small screens or make it a modal */
+    }
+    
+    #chat-container {
+        width: 100%;
+        bottom: 120px; /* Above hand */
+        right: 0;
+        border-radius: 0;
+        background: rgba(0,0,0,0.5);
+    }
+    
+    #my-player {
+        height: 120px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-radius: 0;
+        padding: 5px;
+    }
+    
+    .tile {
+        width: 30px;
+        height: 60px;
+    }
+    .board-tile.horizontal {
+        margin: 0 10px;
+    }
+}
+
+.score-floating-anim {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--boteco-yellow);
+    text-shadow: 2px 2px 4px #000, 0 0 10px #fcd116;
+    animation: floatUpFade 2s ease-out forwards;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes floatUpFade {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -20px) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -80px) scale(1); }
+}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dominó Online - Boteco Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- LOBBY SCREEN -->
+        <div id="lobby-screen" class="screen active">
+            <div class="lobby-container">
+                <h1 class="game-title">Dominó de Boteco</h1>
+                
+                <div class="profile-setup">
+                    <h3>Seu Perfil</h3>
+                    <input type="text" id="player-name" placeholder="Seu Apelido (ex: Zé da Silva)" value="Zé">
+                    <div class="avatar-selection">
+                        <label><input type="radio" name="avatar" value="capivara" checked> <span>🐹 Capivara</span></label>
+                        <label><input type="radio" name="avatar" value="vira-lata"> <span>🐶 Caramelo</span></label>
+                        <label><input type="radio" name="avatar" value="copo-americano"> <span>🍺 Copo</span></label>
+                        <label><input type="radio" name="avatar" value="coxinha"> <span>🍗 Coxinha</span></label>
+                    </div>
+                </div>
+
+                <div class="room-management">
+                    <div class="create-room">
+                        <h3>Criar Mesa</h3>
+                        <input type="text" id="new-room-name" placeholder="Nome da Mesa">
+                        <input type="password" id="new-room-password" placeholder="Senha (Opcional)">
+                        <button id="btn-create-room">Criar Mesa</button>
+                    </div>
+                    <div class="room-list-container">
+                        <h3>Mesas Abertas</h3>
+                        <ul id="room-list">
+                            <!-- Rooms injected here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WAITING ROOM SCREEN -->
+        <div id="waiting-screen" class="screen">
+            <div class="waiting-container">
+                <h2 id="waiting-room-name">Mesa</h2>
+                <div class="players-list" id="waiting-players-list">
+                    <!-- Players injected here -->
+                </div>
+                <div class="waiting-actions">
+                    <button id="btn-start-bots">Completar com Bots & Iniciar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="screen">
+            <div class="table-texture">
+                <!-- Visual Table Elements -->
+                <div class="table-decoration copo">🍺</div>
+                <div class="table-decoration petisco">🥟</div>
+
+                <div id="opponents-container">
+                    <div class="opponent" id="player-1">
+                        <div class="avatar-bubble"></div>
+                        <div class="avatar">👤</div>
+                        <div class="name">Esp.</div>
+                        <div class="hand-count">7</div>
+                    </div>
+                    <div class="opponent" id="player-2">
+                        <div class="avatar-bubble"></div>
+                        <div class="avatar">👤</div>
+                        <div class="name">Esp.</div>
+                        <div class="hand-count">7</div>
+                    </div>
+                    <div class="opponent" id="player-3">
+                        <div class="avatar-bubble"></div>
+                        <div class="avatar">👤</div>
+                        <div class="name">Esp.</div>
+                        <div class="hand-count">7</div>
+                    </div>
+                </div>
+
+                <div id="board-container">
+                    <div id="board-scroll">
+                        <div id="board">
+                            <!-- Tiles injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="my-player">
+                    <div id="my-avatar-container">
+                        <div class="avatar-bubble" id="my-bubble"></div>
+                        <div class="avatar" id="my-avatar">👤</div>
+                    </div>
+                    <div id="my-hand">
+                        <!-- Tiles injected here -->
+                    </div>
+                    <div class="action-buttons">
+                        <button id="btn-pass">Passar a Vez</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comanda (Scoreboard) -->
+            <div id="comanda">
+                <div class="comanda-header">Comanda</div>
+                <ul id="comanda-log">
+                    <li>Mesa aberta.</li>
+                </ul>
+            </div>
+
+            <!-- Chat & Reactions -->
+            <div id="chat-container">
+                <div id="chat-messages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Falar no bar...">
+                    <button id="btn-send-chat">Enviar</button>
+                </div>
+                <div class="reactions">
+                    <button class="reaction-btn" data-reaction="Lá vai fumaça!">💨 Fumaça!</button>
+                    <button class="reaction-btn" data-reaction="Carroça de Sena!">🚂 Carroça!</button>
+                    <button class="reaction-btn" data-reaction="Bati!">💥 Bati!</button>
+                    <button class="reaction-btn" data-reaction="Paga a rodada!">🍻 Paga!</button>
+                </div>
+            </div>
+            
+            <!-- Game Over Modal -->
+            <div id="game-over-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2 id="game-over-title">Fim de Jogo!</h2>
+                    <p id="game-over-reason"></p>
+                    <button onclick="location.reload()">Sair do Bar</button>
+                </div>
+            </div>
+            
+             <!-- Password Modal -->
+            <div id="password-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Mesa Fechada</h2>
+                    <input type="password" id="join-password" placeholder="Digite a senha">
+                    <button id="btn-submit-password">Entrar</button>
+                    <button onclick="document.getElementById('password-modal').classList.add('hidden')">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
