@@ -203,6 +203,7 @@ ul#room-list li button {
 /* --- GAME SCREEN --- */
 #game-screen {
     background: var(--wood-dark);
+    flex-direction: column;
 }
 
 .table-texture {
@@ -331,6 +332,7 @@ ul#room-list li button {
     position: relative;
     z-index: 2;
     padding: 80px 140px;
+    min-height: 0;
 }
 
 #board-scroll {
@@ -538,6 +540,48 @@ ul#room-list li button {
     margin: 0 20px;
 }
 
+/* Play overlay — direction buttons on playable tiles */
+.play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    z-index: 10;
+    background: rgba(0,0,0,0.15);
+    border-radius: 6px;
+}
+
+.play-overlay button {
+    background: var(--boteco-yellow);
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    transition: transform 0.1s;
+    touch-action: manipulation;
+}
+
+.play-overlay button:active {
+    transform: scale(0.9);
+}
+
+.unplayable-dim {
+    opacity: 0.4;
+    filter: grayscale(60%);
+}
+
+
 /* Comanda */
 #comanda {
     position: absolute;
@@ -653,42 +697,152 @@ ul#room-list li button {
     color: #111;
 }
 
-/* Mobile Responsiveness */
+/* ═══════════════════════════════════════
+   MOBILE RESPONSIVENESS (portrait phone)
+   ═══════════════════════════════════════ */
 @media (max-width: 768px) {
+
+    /* Full-screen table, no margins */
     .table-texture {
-        width: 100%;
-        height: 100%;
         top: 0; left: 0;
+        width: 100%; height: 100%;
         border-radius: 0;
+        border-width: 0;
     }
-    
-    #comanda {
-        display: none; /* Hide comanda on small screens or make it a modal */
+
+    /* Hide desktop decorations */
+    .table-decoration { display: none; }
+
+    /* ── Opponents: top / left / right fixed positions ── */
+    .opponent {
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 0.75rem;
     }
-    
-    #chat-container {
-        width: 100%;
-        bottom: 120px; /* Above hand */
-        right: 0;
-        border-radius: 0;
-        background: rgba(0,0,0,0.5);
+    .opponent .avatar { font-size: 1.4rem; }
+    .opponent .hand-count { font-size: 0.7rem; }
+
+    .opponent.pos-top {
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 45%;
     }
-    
+    .opponent.pos-left {
+        top: 50%;
+        left: 4px;
+        transform: translateY(-50%);
+        max-width: 90px;
+    }
+    .opponent.pos-right {
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
+        max-width: 90px;
+    }
+
+    /* ── Board: takes the center space ── */
+    #board-container {
+        padding: 70px 100px 10px 100px;
+        flex: 1;
+    }
+
+    #board-scroll {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #board { padding: 20px; }
+
+    /* Smaller board tiles on mobile */
+    .board-tile {
+        width: 28px;
+        height: 56px;
+    }
+
+    /* ── My hand at the bottom ── */
     #my-player {
-        height: 120px;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
+        position: relative;
+        height: auto;
+        min-height: 110px;
+        padding: 6px 8px;
+        gap: 6px;
         border-radius: 0;
-        padding: 5px;
+        flex-shrink: 0;
     }
-    
-    .tile {
+
+    #my-avatar-container .avatar { font-size: 1.6rem; }
+    #my-avatar-container .name   { font-size: 0.7rem; }
+
+    #my-hand {
+        gap: 6px;
+        padding: 4px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hand tiles slightly smaller */
+    #my-hand .tile {
+        width: 34px;
+        height: 68px;
+        flex-shrink: 0;
+    }
+
+    /* Pass button */
+    #btn-pass {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+
+    /* ── Comanda: collapsed tab in corner ── */
+    #comanda {
+        top: auto;
+        bottom: 115px;
+        right: 4px;
+        width: 130px;
+        height: 140px;
+        font-size: 0.8rem;
+        padding: 8px;
+        transform: rotate(0deg);
+        border-radius: 8px;
+        z-index: 20;
+    }
+    .comanda-header { font-size: 1rem; margin-bottom: 4px; }
+    #comanda-log li { font-size: 0.7rem; margin-bottom: 2px; }
+
+    /* ── Chat: compact strip above hand ── */
+    #chat-container {
+        position: relative;
+        width: 100%;
+        bottom: auto;
+        right: auto;
+        border-radius: 0;
+        padding: 6px 8px;
+        background: rgba(0,0,0,0.6);
+        gap: 4px;
+        flex-shrink: 0;
+        z-index: 5;
+    }
+
+    #chat-messages {
+        height: 50px;
+        font-size: 0.75rem;
+    }
+
+    .chat-input-area input  { padding: 6px; font-size: 0.85rem; }
+    .chat-input-area button { padding: 6px 10px; font-size: 0.85rem; }
+
+    .reactions { gap: 4px; }
+    .reaction-btn { font-size: 0.7rem; padding: 4px 6px; }
+
+    /* ── Score floating animation: smaller on mobile ── */
+    .score-floating-anim { font-size: 1.8rem; }
+
+    /* ── Play overlay arrows: bigger tap targets ── */
+    .play-overlay button {
+        font-size: 1.2rem;
         width: 30px;
-        height: 60px;
-    }
-    .board-tile.horizontal {
-        margin: 0 10px;
+        height: 30px;
     }
 }
 
