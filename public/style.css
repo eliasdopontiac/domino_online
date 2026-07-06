@@ -742,7 +742,8 @@ ul#room-list li button {
 
     /* ── Tabuleiro: centro da mesa, com espaço para mão (120px) e oponentes ── */
     #board-container {
-        padding: 70px 90px 0px 90px;
+        /* top: oponente topo; sides: oponentes laterais; bottom: mão(115)+chat(90) */
+        padding: 65px 85px 205px 85px;
         flex: 1;
         min-height: 0;
     }
@@ -752,11 +753,31 @@ ul#room-list li button {
         -webkit-overflow-scrolling: touch;
     }
 
-    #board { padding: 15px; }
+    #board { padding: 10px; }
 
-    .board-tile {
-        width: 26px;
-        height: 52px;
+    /* Board tiles: especificidade alta para sobrescrever .tile */
+    .tile.board-tile {
+        width: 22px;
+        height: 44px;
+        border-radius: 3px;
+        border-width: 1px;
+    }
+
+    /* Linha do meio nas pedras do tabuleiro */
+    .tile.board-tile::after {
+        height: 1px;
+    }
+
+    /* Pontos menores nas pedras do tabuleiro */
+    .tile.board-tile .dot {
+        width: 4px;
+        height: 4px;
+    }
+
+    /* Padding menor nas metades das pedras do tabuleiro */
+    .tile.board-tile .tile-half {
+        padding: 2px;
+        gap: 0px;
     }
 
     /* ── Minha mão: na base da mesa (dentro de .table-texture) ── */
@@ -775,16 +796,29 @@ ul#room-list li button {
     #my-avatar-container .avatar { font-size: 1.5rem; }
 
     #my-hand {
-        gap: 5px;
-        padding: 2px;
+        gap: 4px;
+        padding: 2px 4px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        align-items: center;
     }
 
+    /* Pedras da mão do jogador — toque amigável */
     #my-hand .tile {
-        width: 32px;
-        height: 64px;
+        width: 36px;
+        height: 72px;
         flex-shrink: 0;
+        border-radius: 5px;
+    }
+
+    #my-hand .tile .dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    #my-hand .tile .tile-half {
+        padding: 3px;
+        gap: 1px;
     }
 
     #btn-pass {
@@ -799,11 +833,11 @@ ul#room-list li button {
         position: absolute;
         bottom: 115px;
         left: 0;
-        width: calc(100% - 130px);
+        width: calc(100% - 128px);
         border-radius: 0;
-        padding: 5px 8px;
-        background: rgba(0,0,0,0.7);
-        gap: 4px;
+        padding: 4px 6px;
+        background: rgba(0,0,0,0.75);
+        gap: 3px;
         z-index: 15;
     }
 
