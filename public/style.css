@@ -702,7 +702,7 @@ ul#room-list li button {
    ═══════════════════════════════════════ */
 @media (max-width: 768px) {
 
-    /* Full-screen table, no margins */
+    /* Mesa ocupa tela toda */
     .table-texture {
         top: 0; left: 0;
         width: 100%; height: 100%;
@@ -710,41 +710,41 @@ ul#room-list li button {
         border-width: 0;
     }
 
-    /* Hide desktop decorations */
+    /* Esconde decorações */
     .table-decoration { display: none; }
 
-    /* ── Opponents: top / left / right fixed positions ── */
+    /* ── Oponentes: posições fixas ── */
     .opponent {
-        padding: 6px 8px;
+        padding: 5px 7px;
         border-radius: 8px;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+        min-width: 0;
     }
-    .opponent .avatar { font-size: 1.4rem; }
-    .opponent .hand-count { font-size: 0.7rem; }
+    .opponent .avatar    { font-size: 1.3rem; }
+    .opponent .name      { font-size: 0.65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
+    .opponent .hand-count{ font-size: 0.65rem; }
 
     .opponent.pos-top {
         top: 6px;
         left: 50%;
         transform: translateX(-50%);
-        max-width: 45%;
     }
     .opponent.pos-left {
         top: 50%;
         left: 4px;
-        transform: translateY(-50%);
-        max-width: 90px;
+        transform: translateY(-60%);
     }
     .opponent.pos-right {
         top: 50%;
         right: 4px;
-        transform: translateY(-50%);
-        max-width: 90px;
+        transform: translateY(-60%);
     }
 
-    /* ── Board: takes the center space ── */
+    /* ── Tabuleiro: centro da mesa, com espaço para mão (120px) e oponentes ── */
     #board-container {
-        padding: 70px 100px 10px 100px;
+        padding: 70px 90px 0px 90px;
         flex: 1;
+        min-height: 0;
     }
 
     #board-scroll {
@@ -752,99 +752,109 @@ ul#room-list li button {
         -webkit-overflow-scrolling: touch;
     }
 
-    #board { padding: 20px; }
+    #board { padding: 15px; }
 
-    /* Smaller board tiles on mobile */
     .board-tile {
-        width: 28px;
-        height: 56px;
+        width: 26px;
+        height: 52px;
     }
 
-    /* ── My hand at the bottom ── */
+    /* ── Minha mão: na base da mesa (dentro de .table-texture) ── */
     #my-player {
-        position: relative;
-        height: auto;
-        min-height: 110px;
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%;
+        height: 115px;
+        background: rgba(0,0,0,0.45);
+        border-radius: 0;
         padding: 6px 8px;
         gap: 6px;
-        border-radius: 0;
         flex-shrink: 0;
     }
 
-    #my-avatar-container .avatar { font-size: 1.6rem; }
-    #my-avatar-container .name   { font-size: 0.7rem; }
+    #my-avatar-container .avatar { font-size: 1.5rem; }
 
     #my-hand {
-        gap: 6px;
-        padding: 4px;
+        gap: 5px;
+        padding: 2px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
 
-    /* Hand tiles slightly smaller */
     #my-hand .tile {
-        width: 34px;
-        height: 68px;
+        width: 32px;
+        height: 64px;
         flex-shrink: 0;
     }
 
-    /* Pass button */
     #btn-pass {
-        padding: 8px 14px;
-        font-size: 0.85rem;
-    }
-
-    /* ── Comanda: collapsed tab in corner ── */
-    #comanda {
-        top: auto;
-        bottom: 115px;
-        right: 4px;
-        width: 130px;
-        height: 140px;
+        padding: 6px 10px;
         font-size: 0.8rem;
-        padding: 8px;
-        transform: rotate(0deg);
-        border-radius: 8px;
-        z-index: 20;
+        white-space: nowrap;
     }
-    .comanda-header { font-size: 1rem; margin-bottom: 4px; }
-    #comanda-log li { font-size: 0.7rem; margin-bottom: 2px; }
 
-    /* ── Chat: compact strip above hand ── */
+    /* ── Chat: faixa absoluta sobre a mão, lado esquerdo ──
+       Lembrete: chat fica FORA de .table-texture, relativo a #game-screen */
     #chat-container {
-        position: relative;
-        width: 100%;
-        bottom: auto;
-        right: auto;
+        position: absolute;
+        bottom: 115px;
+        left: 0;
+        width: calc(100% - 130px);
         border-radius: 0;
-        padding: 6px 8px;
-        background: rgba(0,0,0,0.6);
+        padding: 5px 8px;
+        background: rgba(0,0,0,0.7);
         gap: 4px;
-        flex-shrink: 0;
-        z-index: 5;
+        z-index: 15;
     }
 
     #chat-messages {
-        height: 50px;
-        font-size: 0.75rem;
+        height: 44px;
+        font-size: 0.72rem;
     }
 
-    .chat-input-area input  { padding: 6px; font-size: 0.85rem; }
-    .chat-input-area button { padding: 6px 10px; font-size: 0.85rem; }
+    .chat-input-area input  { padding: 5px; font-size: 0.8rem; }
+    .chat-input-area button { padding: 5px 8px; font-size: 0.8rem; }
 
-    .reactions { gap: 4px; }
-    .reaction-btn { font-size: 0.7rem; padding: 4px 6px; }
+    .reactions { gap: 3px; }
+    .reaction-btn { font-size: 0.65rem; padding: 3px 5px; }
 
-    /* ── Score floating animation: smaller on mobile ── */
-    .score-floating-anim { font-size: 1.8rem; }
+    /* ── Comanda: canto inferior direito, acima da mão ──
+       Lembrete: comanda fica FORA de .table-texture, relativo a #game-screen */
+    #comanda {
+        position: absolute;
+        top: auto;
+        bottom: 115px;
+        right: 0;
+        left: auto;
+        width: 125px;
+        height: auto;
+        max-height: 160px;
+        font-size: 0.75rem;
+        padding: 7px;
+        transform: rotate(0deg);
+        border-radius: 8px 0 0 0;
+        z-index: 15;
+        overflow-y: auto;
+    }
 
-    /* ── Play overlay arrows: bigger tap targets ── */
+    .comanda-header {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+    }
+
+    #comanda-log li { font-size: 0.68rem; margin-bottom: 2px; }
+
+    /* ── Animações menores ── */
+    .score-floating-anim { font-size: 1.6rem; }
+
+    /* ── Botões de direção maiores para toque ── */
     .play-overlay button {
-        font-size: 1.2rem;
-        width: 30px;
-        height: 30px;
+        font-size: 1rem;
+        width: 28px;
+        height: 28px;
     }
 }
+
 
 .score-floating-anim {
     position: absolute;
